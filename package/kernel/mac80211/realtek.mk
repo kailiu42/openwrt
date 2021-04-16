@@ -1,7 +1,7 @@
 PKG_DRIVERS += \
 	rtl8180 rtl8187 \
 	rtlwifi rtlwifi-pci rtlwifi-btcoexist rtlwifi-usb rtl8192c-common \
-	rtl8192ce rtl8192se rtl8192de rtl8192cu rtl8723bs rtl8821ae \
+	rtl8188ee rtl8192ce rtl8192se rtl8192de rtl8192cu rtl8723bs rtl8821ae \
 	rtl8xxxu rtw88
 
 config-$(call config_package,rtl8180) += RTL8180
@@ -12,6 +12,7 @@ config-$(call config_package,rtlwifi-pci) += RTLWIFI_PCI
 config-$(call config_package,rtlwifi-btcoexist) += RTLBTCOEXIST
 config-$(call config_package,rtlwifi-usb) += RTLWIFI_USB
 config-$(call config_package,rtl8192c-common) += RTL8192C_COMMON
+config-$(call config_package,rtl8188ee) += RTL8188EE
 config-$(call config_package,rtl8192ce) += RTL8192CE
 config-$(call config_package,rtl8192se) += RTL8192SE
 config-$(call config_package,rtl8192de) += RTL8192DE
@@ -101,6 +102,15 @@ define KernelPackage/rtl8192c-common
   DEPENDS+= +kmod-rtlwifi
   FILES:= $(PKG_BUILD_DIR)/drivers/net/wireless/realtek/rtlwifi/rtl8192c/rtl8192c-common.ko
   HIDDEN:=1
+endef
+
+define KernelPackage/rtl8188ee
+  $(call KernelPackage/mac80211/Default)
+  TITLE:=Realtek RTL8188EE support
+  DEPENDS+= +kmod-rtlwifi-pci
+  DEPENDS+= +kmod-rtlwifi-pci +rtl8188ee-firmware
+  FILES:= $(PKG_BUILD_DIR)/drivers/net/wireless/realtek/rtlwifi/rtl8188ee/rtl8188ee.ko
+  AUTOLOAD:=$(call AutoProbe,rtl8188ee)
 endef
 
 define KernelPackage/rtl8192ce
